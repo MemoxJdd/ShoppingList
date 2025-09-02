@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
+import com.jdd.shoppinglist.utils.formatMillisToDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,7 +22,7 @@ import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
 fun ShoppingListScreen(
     viewModel: ShoppingViewModel,
     onListClick: (ShoppingList) -> Unit,
-    OnAddListClick: () -> Unit // <-- EKLENEN PARAMETRE
+    onAddListClick: () -> Unit // <-- Parametre adı küçük harfle!
 ) {
     val shoppingLists by viewModel.shoppingLists.observeAsState(emptyList())
 
@@ -32,7 +33,7 @@ fun ShoppingListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* yeni liste ekleme işlemi */ }) {
+            FloatingActionButton(onClick = { onAddListClick() }) { // <-- Burada parametreyi kullandık!
                 Icon(Icons.Default.Add, contentDescription = "Yeni Liste Ekle")
             }
         }
@@ -62,7 +63,7 @@ fun ShoppingListCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = shoppingList.name, style = MaterialTheme.typography.titleLarge)
-            Text(text = "Oluşturulma: ${shoppingList.createdAt}")
+            Text("Oluşturulma: ${formatMillisToDate(shoppingList.createdAt)}")
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.jdd.shoppinglist.ui.screens
 
-import androidx.compose.ui.text.input.KeybordOptions
+//import androidx.compose.ui.text.input.KeyboardOptions
+//import ads_mobile_sdk.h5
+import androidx.compose.foundation.background
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -12,110 +14,127 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.Data.model.ShoppingItem
 import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
-
+import com.jdd.shoppinglist.ui.components.ShoppingItemRow
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListDetailScreen(
     shoppingList: ShoppingList,
-    viewModel: ShoppingViewModel
+    items: List<ShoppingItem>,
+    onAddItem: (String, Double, Double) -> Unit,
+    onDeleteItem: (ShoppingItem) -> Unit
 ) {
-    val items by viewModel.getItemsForList(shoppingList.id).observeAsState(emptyList())
     var itemName by remember { mutableStateOf("") }
-    var priceText by remember { mutableStateOf("") }
     var quantityText by remember { mutableStateOf("") }
-    var showError by remember { mutableStateOf(false) }
+    var priceText by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(shoppingList.name) }
-            )
-        }
-    ) { padding ->
-        Column(
+    val totalSum = items.sumOf { it.quantity * it.price }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = shoppingList.name,
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+
+        // Tablo başlığı
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
+                .fillMaxWidth()
+                .background(Color(0xFFEEEEEE))
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(
-                value = itemName,
-                onValueChange = {
-                    itemName = it
-                    showError = false
-                },
-                label = { Text("Ürün Adı") },
+            Text("Ürün", modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold)
+            Text("Miktar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+            Text("Fiyat", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+            Text("Tutar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.width(32.dp)) // Silme iconu için boşluk
+        }
+
+        Divider()
+
+        // Ürünler
+        items.forEach { item ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                isError = showError && itemName.isBlank()
-            )
-            OutlinedTextField(
-                value = priceText,
-                onValueChange = { priceText = it },
-                label = { Text("Fiyat") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                keyboardOptions =androidx.compose.ui.text.input.KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-            OutlinedTextField(
-                value = quantityText,
-                onValueChange = { quantityText = it },
-                label = { Text("Miktar") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-            if (showError) {
-                Text(
-                    text = "Tüm alanları doldurun!",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-            Button(
-                onClick = {
-                    val price = priceText.toDoubleOrNull()
-                    val quantity = quantityText.toIntOrNull()
-                    if (itemName.isBlank() || price == null || quantity == null) {
-                        showError = true
-                    } else {
-                        viewModel.insertItem(
-                            ShoppingItem(
-                                name = itemName,
-                                price = price,
-                                quantity = quantity,
-                                listId = shoppingList.id
-                            )
-                        )
-                        itemName = ""
-                        priceText = ""
-                        quantityText = ""
-                        showError = false
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Ürün Ekle")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(items) { item ->
-                    ShoppingItemRow(
-                        item = item,
-                        onDelete = { viewModel.deleteItem(it) }
-                    )
+                Text(item.name, modifier = Modifier.weight(2f))
+                Text("${item.quantity}", modifier = Modifier.weight(1f))
+                Text("₺${item.price}", modifier = Modifier.weight(1f))
+                Text("₺${"%.2f".format(item.quantity * item.price)}", modifier = Modifier.weight(1f))
+                IconButton(
+                    onClick = { onDeleteItem(item) },
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(Icons.Default.Delete, contentDescription = "Sil")
                 }
             }
+        }
+
+        Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 2.dp)
+
+        // Alt toplam
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.weight(4f))
+            Text("Toplam: ₺${"%.2f".format(totalSum)}", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Ürün ekleme formu
+        Text(
+            text = "Yeni Ürün Ekle",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        OutlinedTextField(
+            value = itemName,
+            onValueChange = { itemName = it },
+            label = { Text("Ürün Adı") },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        )
+        OutlinedTextField(
+            value = quantityText,
+            onValueChange = { quantityText = it },
+            label = { Text("Miktar") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        )
+        OutlinedTextField(
+            value = priceText,
+            onValueChange = { priceText = it },
+            label = { Text("Fiyat") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+        )
+
+        Button(
+            onClick = {
+                val quantity = quantityText.toDoubleOrNull() ?: 0.0
+                val price = priceText.toDoubleOrNull() ?: 0.0
+                if (itemName.isNotBlank() && quantity > 0 && price > 0) {
+                    onAddItem(itemName, quantity, price)
+                    itemName = ""
+                    quantityText = ""
+                    priceText = ""
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ürün Ekle")
         }
     }
 }

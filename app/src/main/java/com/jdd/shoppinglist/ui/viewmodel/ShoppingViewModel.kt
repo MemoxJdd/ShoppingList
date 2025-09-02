@@ -10,41 +10,16 @@ import kotlinx.coroutines.launch
 class ShoppingViewModel(
     private val repository: ShoppingRepository
 ) : ViewModel() {
-
-    // Tüm alışveriş listelerini gözlemler
     val shoppingLists: LiveData<List<ShoppingList>> = repository.getAllLists()
+    fun getItemsForList(listId: Int): LiveData<List<ShoppingItem>> = repository.getItemsForList(listId)
 
-    // Listeye ait ürünleri gözlemler
-    fun getItemsForList(listId: Int): LiveData<List<ShoppingItem>> =
-        repository.getItemsForList(listId)
-
-    // Liste ekle
-    fun insertList(list: ShoppingList) = viewModelScope.launch {
-        repository.insertList(list)
+    fun insertList(list: ShoppingList, onInserted: (Long) -> Unit = {}) = viewModelScope.launch {
+        val newId = repository.insertList(list)
+        onInserted(newId)
     }
-
-    // Liste güncelle
-    fun updateList(list: ShoppingList) = viewModelScope.launch {
-        repository.updateList(list)
-    }
-
-    // Liste sil
-    fun deleteList(list: ShoppingList) = viewModelScope.launch {
-        repository.deleteList(list)
-    }
-
-    // Ürün ekle
-    fun insertItem(item: ShoppingItem) = viewModelScope.launch {
-        repository.insertItem(item)
-    }
-
-    // Ürün güncelle
-    fun updateItem(item: ShoppingItem) = viewModelScope.launch {
-        repository.updateItem(item)
-    }
-
-    // Ürün sil
-    fun deleteItem(item: ShoppingItem) = viewModelScope.launch {
-        repository.deleteItem(item)
-    }
+    fun updateList(list: ShoppingList) = viewModelScope.launch { repository.updateList(list) }
+    fun deleteList(list: ShoppingList) = viewModelScope.launch { repository.deleteList(list) }
+    fun insertItem(item: ShoppingItem) = viewModelScope.launch { repository.insertItem(item) }
+    fun updateItem(item: ShoppingItem) = viewModelScope.launch { repository.updateItem(item) }
+    fun deleteItem(item: ShoppingItem) = viewModelScope.launch { repository.deleteItem(item) }
 }

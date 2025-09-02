@@ -8,7 +8,7 @@ data class ShoppingItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val listId: Int, // Hangi alışveriş listesine ait
     val name: String,
-    val quantity: Int,
+    val quantity: Double,
     val price: Double,
     val isPurchased: Boolean = false
 )

@@ -7,10 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.jdd.shoppinglist.Data.db.AppDatabase
+import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.Data.repository.ShoppingRepository
+import com.jdd.shoppinglist.ui.AppNavigation
 import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
 
 import com.jdd.shoppinglist.ui.screens.ShoppingListScreen
+import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModelFactory
 import java.lang.reflect.Modifier
 
 class MainActivity : ComponentActivity() {
@@ -29,9 +32,10 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            // ViewModel'i doğrudan oluşturmak (factory ile daha iyidir, örnek için basit gösterildi)
-            val viewModel = ShoppingViewModel(repository)
-            ShoppingListScreen(viewModel = viewModel, onListClick = {})
+            val viewModel: ShoppingViewModel = viewModel(
+                factory = ShoppingViewModelFactory(repository)
+            )
+            AppNavigation(viewModel = viewModel)
         }
     }
 }

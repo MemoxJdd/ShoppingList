@@ -10,7 +10,7 @@ interface ShoppingListDao {
     fun getAllLists(): LiveData<List<ShoppingList>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertList(list: ShoppingList)
+    suspend fun insertList(list: ShoppingList):Long
 
     @Update
     suspend fun updateList(list: ShoppingList)
