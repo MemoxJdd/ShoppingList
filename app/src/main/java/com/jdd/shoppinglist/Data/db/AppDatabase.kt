@@ -7,7 +7,7 @@ import com.jdd.shoppinglist.Data.model.ShoppingItem
 
 @Database(
     entities = [ShoppingList::class, ShoppingItem::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

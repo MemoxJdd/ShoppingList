@@ -98,27 +98,27 @@ fun ShoppingListDetailScreen(
         Text(
             text = "Yeni Ürün Ekle",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = itemName,
             onValueChange = { itemName = it },
             label = { Text("Ürün Adı") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = quantityText,
             onValueChange = { quantityText = it },
             label = { Text("Miktar") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = priceText,
             onValueChange = { priceText = it },
             label = { Text("Fiyat") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
         )
 
         Button(

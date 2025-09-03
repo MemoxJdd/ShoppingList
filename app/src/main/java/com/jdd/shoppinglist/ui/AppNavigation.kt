@@ -37,7 +37,8 @@ fun AppNavigation(viewModel: ShoppingViewModel) {
         ) { backStackEntry ->
             val listId = backStackEntry.arguments?.getInt("listId") ?: return@composable
             val list = viewModel.shoppingLists.value?.find { it.id == listId }
-            val itemsForList by viewModel.getItemsForList(listId).observeAsState(emptyList()) // DOĞRU YERDE!
+            val itemsForList by viewModel.getItemsForList(listId)
+                .observeAsState(emptyList())
             if (list != null) {
                 ShoppingListDetailScreen(
                     shoppingList = list,
@@ -56,9 +57,9 @@ fun AppNavigation(viewModel: ShoppingViewModel) {
                         viewModel.deleteItem(item)
                     }
                 )
-
             }
         }
+        // **Burada!**: 'add' route'u ana seviyede tanımlanmalı
         composable("add") {
             AddShoppingListScreen(
                 viewModel = viewModel,

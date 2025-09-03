@@ -54,8 +54,7 @@ android {
 
 dependencies {
 
-    implementation(libs.ads.mobile.sdk)
-    dependencies {
+        implementation(libs.ads.mobile.sdk)
         implementation(platform(libs.androidx.compose.bom))
         implementation(libs.androidx.compose.ui)
         implementation(libs.androidx.ui.text)
@@ -79,5 +78,5 @@ dependencies {
         androidTestImplementation(libs.androidx.ui.test.junit4)
         debugImplementation(libs.androidx.ui.tooling)
         debugImplementation(libs.androidx.ui.test.manifest)
-    }
+
 }
