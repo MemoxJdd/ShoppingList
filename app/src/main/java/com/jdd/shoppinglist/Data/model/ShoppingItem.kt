@@ -10,5 +10,6 @@ data class ShoppingItem(
     val name: String,
     val quantity:Double,
     val price:Double,
+    var totalAmount: Double = 0.0,
     val isPurchased: Boolean = false
 )

@@ -22,4 +22,8 @@ interface ShoppingListDao {
 
     @Query("UPDATE shopping_lists SET isArchived = 1 WHERE id = :listId")
     suspend fun archiveList(listId: Int)
+
+    // Satır toplamını güncelle
+    @Query("UPDATE shopping_lists SET totalAmount = :total WHERE id = :listId")
+    suspend fun updateTotal(listId: Int, total: Double)
 }

@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jdd.shoppinglist.Data.model.ShoppingItem
 import com.jdd.shoppinglist.Data.model.ShoppingList
-
 @Composable
 fun ShoppingListDetailScreen(
     shoppingList: ShoppingList,
@@ -30,100 +29,48 @@ fun ShoppingListDetailScreen(
 
     val totalSum = items.sumOf { it.quantity * it.price }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(12.dp)) {
         Text(
             text = shoppingList.name,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 20.dp)
+            style = MaterialTheme.typography.body2, // Daha küçük başlık
+            modifier = Modifier.padding(bottom = 10.dp)
         )
 
-        // Header Row
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFFEEEEEE))
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Ürün", modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold)
-            Text("Miktar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-            Text("Fiyat", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-            Text("Tutar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(32.dp))
-        }
-
-        Divider()
-
-        // Item Rows
-        items.forEach { item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(item.name, modifier = Modifier.weight(2f))
-                Text("${item.quantity}", modifier = Modifier.weight(1f))
-                Text("₺${item.price}", modifier = Modifier.weight(1f))
-                Text("₺${"%.2f".format(item.quantity * item.price)}", modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = { onDeleteItem(item) },
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(Icons.Default.Delete, contentDescription = "Sil")
-                }
-            }
-        }
-
-        Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 2.dp)
-
-        // Total Row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.weight(4f))
-            Text(
-                text = "Toplam: ₺${"%.2f".format(totalSum)}",
-                modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Add Item Section
+        // --- Yeni Ürün Ekle Formu EN ÜSTTE ---
         Text(
             text = "Yeni Ürün Ekle",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(bottom = 4.dp)
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(bottom = 2.dp)
         )
 
         OutlinedTextField(
             value = itemName,
             onValueChange = { itemName = it },
-            label = { Text("Ürün Adı") },
+            label = { Text("Ürün Adı", style = MaterialTheme.typography.caption) },
+            textStyle = MaterialTheme.typography.caption,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 4.dp)
+                .padding(bottom = 2.dp)
         )
         OutlinedTextField(
             value = quantityText,
             onValueChange = { quantityText = it },
-            label = { Text("Miktar") },
+            label = { Text("Miktar", style = MaterialTheme.typography.caption) },
+            textStyle = MaterialTheme.typography.caption,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 4.dp)
+                .padding(bottom = 2.dp)
         )
         OutlinedTextField(
             value = priceText,
             onValueChange = { priceText = it },
-            label = { Text("Fiyat") },
+            label = { Text("Fiyat", style = MaterialTheme.typography.caption) },
+            textStyle = MaterialTheme.typography.caption,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 4.dp)
+                .padding(bottom = 2.dp)
         )
 
         Button(
@@ -139,7 +86,61 @@ fun ShoppingListDetailScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Ürün Ekle")
+            Text("Ürün Ekle", style = MaterialTheme.typography.caption)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // --- ÜRÜN LİSTESİ VE TOPLAM ALTA ---
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFEEEEEE))
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Ürün", modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.caption)
+            Text("Miktar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.caption)
+            Text("Fiyat", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.caption)
+            Text("Tutar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.caption)
+            Spacer(modifier = Modifier.width(28.dp))
+        }
+
+        Divider()
+
+        items.forEach { item ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(item.name, modifier = Modifier.weight(2f), style = MaterialTheme.typography.caption)
+                Text("${item.quantity}", modifier = Modifier.weight(1f), style = MaterialTheme.typography.caption)
+                Text("₺${item.price}", modifier = Modifier.weight(1f), style = MaterialTheme.typography.caption)
+                Text("₺${"%.2f".format(item.quantity * item.price)}", modifier = Modifier.weight(1f), style = MaterialTheme.typography.caption)
+                IconButton(
+                    onClick = { onDeleteItem(item) },
+                    modifier = Modifier.size(28.dp)
+                ) {
+                    Icon(Icons.Default.Delete, contentDescription = "Sil")
+                }
+            }
+        }
+
+        Divider(modifier = Modifier.padding(vertical = 6.dp), thickness = 1.dp)
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.weight(4f))
+            Text(
+                text = "Toplam: ₺${"%.2f".format(totalSum)}",
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.caption
+            )
         }
     }
 }

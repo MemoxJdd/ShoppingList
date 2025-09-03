@@ -9,5 +9,7 @@ data class ShoppingList(
     val id: Int = 0,
     val name: String,
     val createdAt: Long,
-   val isArchived: Boolean = false
+   val isArchived: Boolean = false,
+    val totalAmount: Double = 0.0 // <-- yeni alan
+
 )

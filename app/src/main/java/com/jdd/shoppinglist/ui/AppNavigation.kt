@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.Data.model.ShoppingItem
+import com.jdd.shoppinglist.ui.screens.ArchivedListsScreen
 import com.jdd.shoppinglist.ui.screens.ShoppingListDetailScreenContainer
 import com.jdd.shoppinglist.ui.screens.ShoppingListScreen
 import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
@@ -24,12 +25,20 @@ fun AppNavigation(
     val shoppingLists by viewModel.shoppingLists.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
     var newListName by remember { mutableStateOf("") }
-
+    val itemsMap by viewModel.itemsMap.collectAsState()
+    val archivedLists by viewModel.archivedLists.collectAsState() // <-- Doğru kullanım!
+    // ...
     NavHost(
         navController = navController,
         startDestination = "lists",
         modifier = modifier
     ) {
+        composable("archived") {
+            ArchivedListsScreen(
+                archivedLists = archivedLists,
+                onDelete = { viewModel.deleteList(it) }
+            )
+        }
         composable("lists") {
             ShoppingListScreen(
                 navController = navController,

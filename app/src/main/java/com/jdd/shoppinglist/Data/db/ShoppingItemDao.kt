@@ -10,8 +10,11 @@ interface ShoppingItemDao {
     @Query("SELECT * FROM shopping_items WHERE listId = :listId")
     fun getItemsForListFlow(listId: Int): Flow<List<ShoppingItem>>
 
+    @Query("SELECT * FROM shopping_items WHERE listId = :listId")
+    suspend fun getItemsForList(listId: Int): List<ShoppingItem> // <-- toplam tutar için eklenmeli
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItem(item: ShoppingItem):Long
+    suspend fun insertItem(item: ShoppingItem): Long
 
     @Update
     suspend fun updateItem(item: ShoppingItem)

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.Data.model.ShoppingItem
 import com.jdd.shoppinglist.Data.repository.ShoppingRepository
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,9 +19,13 @@ import kotlinx.coroutines.launch
 class ShoppingViewModel(
     private val repository: ShoppingRepository
 ) : ViewModel() {
+    val shoppingLists = repository.getActiveListsFlow()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+    val archivedLists = repository.getArchivedListsFlow()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _shoppingLists = MutableStateFlow<List<ShoppingList>>(emptyList())
-    val shoppingLists: StateFlow<List<ShoppingList>> = _shoppingLists.asStateFlow()
+   // val shoppingLists: StateFlow<List<ShoppingList>> = _shoppingLists.asStateFlow()
 
     private val _itemsMap = MutableStateFlow<Map<Int, List<ShoppingItem>>>(emptyMap())
     val itemsMap: StateFlow<Map<Int, List<ShoppingItem>>> = _itemsMap.asStateFlow()

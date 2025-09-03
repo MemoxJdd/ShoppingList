@@ -16,6 +16,7 @@ import androidx.compose.ui.autofill.ContentDataType.Companion.Date
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jdd.shoppinglist.Data.model.ShoppingList
+import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.Locale
 
@@ -29,7 +30,28 @@ fun ShoppingListScreen(
     onAddList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var listToDelete by remember { mutableStateOf<ShoppingList?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Alışveriş Listeleri") },
+                actions = {
+                    Button(
+                        onClick = { navController.navigate("archived") },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)
+                    ) {
+                        Icon(Icons.Default.Archive, contentDescription = "Arşivlenenler")
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Arşivlenenler")
+                    }
+                }
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddList) {
                 Icon(Icons.Filled.Add, contentDescription = "Liste Ekle")
@@ -40,8 +62,18 @@ fun ShoppingListScreen(
             items(shoppingLists, key = { it.id }) { list ->
                 val dismissState = rememberDismissState(confirmStateChange = { value ->
                     when (value) {
-                        DismissValue.DismissedToEnd -> { onArchive(list); false }
-                        DismissValue.DismissedToStart -> { onDelete(list); false }
+                        DismissValue.DismissedToEnd -> { // Sağa swipe: arşivle
+                            onArchive(list)
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar("Liste arşivlendi!")
+                            }
+                            false
+                        }
+                        DismissValue.DismissedToStart -> { // Sola swipe: silmeden önce onayla
+                            listToDelete = list
+                            showDeleteDialog = true
+                            false
+                        }
                         else -> false
                     }
                 })
@@ -60,10 +92,7 @@ fun ShoppingListScreen(
                                 .padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Archive,
-                                contentDescription = "Arşivle"
-                            )
+                            Icon(imageVector = Icons.Default.Archive, contentDescription = "Arşivle")
                             Spacer(modifier = Modifier.width(16.dp))
                             Column {
                                 Text(list.name)
@@ -79,6 +108,30 @@ fun ShoppingListScreen(
                     }
                 )
             }
+        }
+        // Silme onay dialogu
+        if (showDeleteDialog && listToDelete != null) {
+            AlertDialog(
+                onDismissRequest = { showDeleteDialog = false },
+                title = { Text("Silmek istediğinizden emin misiniz?") },
+                text = { Text("Bu listeyi gerçekten silmek istiyor musunuz?") },
+                confirmButton = {
+                    Button(onClick = {
+                        onDelete(listToDelete!!)
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar("Liste silindi!")
+                        }
+                        showDeleteDialog = false
+                        listToDelete = null
+                    }) { Text("Sil") }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        showDeleteDialog = false
+                        listToDelete = null
+                    }) { Text("İptal") }
+                }
+            )
         }
     }
 }
