@@ -6,17 +6,20 @@ import com.jdd.shoppinglist.Data.db.ShoppingListDao
 import com.jdd.shoppinglist.Data.model.ShoppingItem
 import com.jdd.shoppinglist.Data.model.ShoppingList
 
-class ShoppingRepository(
-    private val listDao: ShoppingListDao,
-    private val itemDao: ShoppingItemDao
-) {
-    fun getAllLists(): LiveData<List<ShoppingList>> = listDao.getAllLists()
-    suspend fun insertList(list: ShoppingList): Long = listDao.insertList(list)
-    suspend fun updateList(list: ShoppingList) = listDao.updateList(list)
-    suspend fun deleteList(list: ShoppingList) = listDao.deleteList(list)
 
-    fun getItemsForList(listId: Int): LiveData<List<ShoppingItem>> = itemDao.getItemsForList(listId)
-    suspend fun insertItem(item: ShoppingItem) = itemDao.insertItem(item)
-    suspend fun updateItem(item: ShoppingItem) = itemDao.updateItem(item)
-    suspend fun deleteItem(item: ShoppingItem) = itemDao.deleteItem(item)
+class ShoppingRepository(
+    private val shoppingListDao: ShoppingListDao,
+    private val shoppingItemDao: ShoppingItemDao
+) {
+    // Listeler
+    fun getAllListsFlow() = shoppingListDao.getActiveListsFlow()
+    fun getArchivedListsFlow() = shoppingListDao.getArchivedListsFlow()
+    suspend fun insertList(list: ShoppingList) = shoppingListDao.insertList(list)
+    suspend fun deleteList(list: ShoppingList) = shoppingListDao.deleteList(list)
+    suspend fun archiveList(listId: Int) = shoppingListDao.archiveList(listId)
+
+    // Item'lar
+    fun getItemsForListFlow(listId: Int) = shoppingItemDao.getItemsForListFlow(listId)
+    suspend fun insertItem(item: ShoppingItem) = shoppingItemDao.insertItem(item)
+    suspend fun deleteItem(item: ShoppingItem) = shoppingItemDao.deleteItem(item)
 }

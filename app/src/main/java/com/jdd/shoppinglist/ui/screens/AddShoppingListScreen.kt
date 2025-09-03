@@ -1,10 +1,14 @@
 package com.jdd.shoppinglist.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.materialcore.Text
 import com.jdd.shoppinglist.Data.model.ShoppingList
 import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
 import java.util.*
@@ -17,7 +21,7 @@ fun AddShoppingListScreen(
 ) {
     var listName by remember { mutableStateOf("") }
     var showError by remember { mutableStateOf(false) }
-
+    val renk = MaterialTheme.colors.primary
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,7 +29,7 @@ fun AddShoppingListScreen(
     ) {
         Text(
             text = "Yeni Alışveriş Listesi Ekle",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.body1
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
@@ -41,8 +45,8 @@ fun AddShoppingListScreen(
         if (showError) {
             Text(
                 text = "Liste adı boş olamaz!",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
+                color = MaterialTheme.colors.primary,
+                style = MaterialTheme.typography.body2
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -55,7 +59,7 @@ fun AddShoppingListScreen(
                         name = listName,
                         createdAt = Date().time
                     )
-                    viewModel.insertList(newList)
+                    viewModel.addList(listName)
                     onListAdded()
                 }
             },

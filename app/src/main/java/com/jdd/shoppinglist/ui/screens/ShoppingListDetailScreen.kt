@@ -1,28 +1,22 @@
 package com.jdd.shoppinglist.ui.screens
 
-//import androidx.compose.ui.text.input.KeyboardOptions
-//import ads_mobile_sdk.h5
 import androidx.compose.foundation.background
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.font.FontWeight
-import com.jdd.shoppinglist.Data.model.ShoppingList
+import androidx.compose.ui.unit.dp
 import com.jdd.shoppinglist.Data.model.ShoppingItem
-import com.jdd.shoppinglist.ui.viewmodel.ShoppingViewModel
-import com.jdd.shoppinglist.ui.components.ShoppingItemRow
-@OptIn(ExperimentalMaterial3Api::class)
+import com.jdd.shoppinglist.Data.model.ShoppingList
+
 @Composable
 fun ShoppingListDetailScreen(
     shoppingList: ShoppingList,
@@ -30,20 +24,20 @@ fun ShoppingListDetailScreen(
     onAddItem: (String, Double, Double) -> Unit,
     onDeleteItem: (ShoppingItem) -> Unit
 ) {
-    var itemName by remember { mutableStateOf("") }
-    var quantityText by remember { mutableStateOf("") }
-    var priceText by remember { mutableStateOf("") }
+    var itemName by rememberSaveable { mutableStateOf("") }
+    var quantityText by rememberSaveable { mutableStateOf("") }
+    var priceText by rememberSaveable { mutableStateOf("") }
 
     val totalSum = items.sumOf { it.quantity * it.price }
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = shoppingList.name,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 20.dp)
         )
 
-        // Tablo başlığı
+        // Header Row
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,12 +49,12 @@ fun ShoppingListDetailScreen(
             Text("Miktar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
             Text("Fiyat", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
             Text("Tutar", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(32.dp)) // Silme iconu için boşluk
+            Spacer(modifier = Modifier.width(32.dp))
         }
 
         Divider()
 
-        // Ürünler
+        // Item Rows
         items.forEach { item ->
             Row(
                 modifier = Modifier
@@ -83,42 +77,53 @@ fun ShoppingListDetailScreen(
 
         Divider(modifier = Modifier.padding(vertical = 8.dp), thickness = 2.dp)
 
-        // Alt toplam
+        // Total Row
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.weight(4f))
-            Text("Toplam: ₺${"%.2f".format(totalSum)}", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+            Text(
+                text = "Toplam: ₺${"%.2f".format(totalSum)}",
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Bold
+            )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Ürün ekleme formu
+        // Add Item Section
         Text(
             text = "Yeni Ürün Ekle",
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.padding(bottom = 4.dp)
         )
+
         OutlinedTextField(
             value = itemName,
             onValueChange = { itemName = it },
             label = { Text("Ürün Adı") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = quantityText,
             onValueChange = { quantityText = it },
             label = { Text("Miktar") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 4.dp)
         )
         OutlinedTextField(
             value = priceText,
             onValueChange = { priceText = it },
             label = { Text("Fiyat") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 4.dp)
         )
 
         Button(
