@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SiteYonetim.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89033b3ffa8e5f56d7eac3a66c056a53d7967ee0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9fb3464fe248d38ec9d032791de1eab8bada1cf")]
 [assembly: System.Reflection.AssemblyProductAttribute("SiteYonetim.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SiteYonetim.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
