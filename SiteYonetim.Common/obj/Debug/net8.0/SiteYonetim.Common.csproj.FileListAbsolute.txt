@@ -1,0 +1,12 @@
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/bin/Debug/net8.0/SiteYonetim.Common.deps.json
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/bin/Debug/net8.0/SiteYonetim.Common.dll
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/bin/Debug/net8.0/SiteYonetim.Common.pdb
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.AssemblyInfoInputs.cache
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.AssemblyInfo.cs
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.csproj.CoreCompileInputs.cache
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.sourcelink.json
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.dll
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/refint/SiteYonetim.Common.dll
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/SiteYonetim.Common.pdb
+/home/runner/work/ShoppingList/ShoppingList/SiteYonetim.Common/obj/Debug/net8.0/ref/SiteYonetim.Common.dll
